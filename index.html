@@ -1,78 +1,321 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RELAÇÕES</title>
+
 <style>
 *{box-sizing:border-box}
+
+:root{
+ --bg:#080808;
+ --card:#0d0d0d;
+ --white:#eee;
+ --line:#292929;
+ --muted:#777;
+ --red:#a71925;
+ --red-light:#e04450;
+}
+
 body{
- margin:0;background:#080808;color:#eee;
- font-family:Arial,sans-serif;letter-spacing:1px;
+ margin:0;
+ background:var(--bg);
+ color:var(--white);
+ font-family:Arial,sans-serif;
+ letter-spacing:1px;
+ transition:background .3s,color .3s;
 }
-main{max-width:850px;margin:auto;padding:25px 18px}
-header{border-bottom:1px solid #333;padding-bottom:18px}
-h1{font-weight:300;letter-spacing:9px;font-size:38px}
-small,.muted{color:#777;font-size:10px;letter-spacing:2px}
-hr{border:0;border-top:1px solid #292929;margin:25px 0}
+
+main{
+ max-width:850px;
+ margin:auto;
+ padding:25px 18px 50px;
+}
+
+header{
+ border-bottom:1px solid #333;
+ padding-bottom:18px;
+}
+
+h1{
+ font-weight:300;
+ letter-spacing:9px;
+ font-size:38px;
+}
+
+h3{
+ font-weight:300;
+ letter-spacing:3px;
+}
+
+small,.muted{
+ color:var(--muted);
+ font-size:10px;
+ letter-spacing:2px;
+}
+
+hr{
+ border:0;
+ border-top:1px solid var(--line);
+ margin:25px 0;
+}
+
 input,select,button{
- background:#090909;color:#eee;border:1px solid #444;
- padding:12px;font-size:12px;letter-spacing:1px;
+ background:#090909;
+ color:var(--white);
+ border:1px solid #444;
+ padding:12px;
+ font-size:12px;
+ letter-spacing:1px;
 }
+
 button{cursor:pointer}
 button:hover{border-color:#eee}
+
 select,input{width:100%}
-label{display:block;color:#888;font-size:10px;margin:15px 0 7px}
-.row{display:flex;gap:10px;align-items:center}
-.between{justify-content:space-between}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.person{
- display:flex;align-items:center;gap:13px;
- border:1px solid #292929;padding:12px;min-height:105px;
+
+label{
+ display:block;
+ color:#888;
+ font-size:10px;
+ margin:15px 0 7px;
 }
-.person.self{opacity:.3;pointer-events:none}
+
+.row{
+ display:flex;
+ gap:10px;
+ align-items:center;
+}
+
+.between{justify-content:space-between}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+
+.person{
+ display:flex;
+ align-items:center;
+ gap:13px;
+ border:1px solid var(--line);
+ padding:12px;
+ min-height:105px;
+ transition:border .2s,background .2s;
+}
+
+.person.self{
+ opacity:.3;
+ pointer-events:none;
+}
+
+.person.audio-selected{
+ border:1px solid var(--red-light);
+ background:#190709;
+ box-shadow:inset 0 0 0 1px #571018;
+}
+
 .portrait{
- width:65px;height:75px;border:1px solid #555;
- display:grid;place-items:center;color:#777;font-size:9px;
+ width:65px;
+ height:75px;
+ border:1px solid #555;
+ display:grid;
+ place-items:center;
+ color:#777;
+ font-size:9px;
  flex-shrink:0;
 }
-.name{font-size:12px;margin-bottom:12px}
-.dots{display:flex;gap:9px}
+
+.name{
+ font-size:12px;
+ margin-bottom:12px;
+}
+
+.dots{
+ display:flex;
+ gap:9px;
+}
+
 .dot{
- width:17px;height:17px;border-radius:50%;
- border:1px solid #eee;padding:0;
+ width:17px;
+ height:17px;
+ min-width:17px;
+ border-radius:50%;
+ border:1px solid #eee;
+ padding:0;
 }
+
 .dot.active{background:#eee}
-.dot.red{border-color:#b33}
-.dot.red.active{background:#d22;border-color:#f66}
-.hate-label{color:#c44;font-size:9px;margin-top:8px}
-.panel{border:1px solid #333;padding:20px}
-.hidden{display:none!important}
-.modal{
- position:fixed;inset:0;background:#000e;
- display:grid;place-items:center;padding:20px;
+
+.dot.red{
+ border-color:#b33;
 }
-.modalbox{background:#111;border:1px solid #555;padding:24px;width:100%;max-width:400px}
-.entry{border-top:1px solid #333;padding:12px 0;font-size:11px;color:#aaa}
-@media(max-width:550px){.grid{grid-template-columns:1fr}h1{font-size:30px}}
+
+.dot.red.active{
+ background:#d22;
+ border-color:#f66;
+}
+
+.dot.audio-dot{
+ border-color:#e04450;
+}
+
+.dot.audio-dot.active{
+ background:#e04450;
+ border-color:#ff7b83;
+ box-shadow:0 0 7px #a71925;
+}
+
+.hate-label{
+ color:#c44;
+ font-size:9px;
+ margin-top:8px;
+}
+
+.panel{
+ border:1px solid #333;
+ padding:20px;
+}
+
+.hidden{display:none!important}
+
+.entry{
+ border-top:1px solid #333;
+ padding:12px 0;
+ font-size:11px;
+ color:#aaa;
+}
+
+.audio-instructions{
+ color:#e36b74;
+ font-size:10px;
+ letter-spacing:2px;
+ margin:20px 0;
+}
+
+.audio-confirm{
+ margin-top:22px;
+ border:1px solid var(--red);
+ background:#170709;
+ padding:18px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ flex-wrap:wrap;
+}
+
+.audio-confirm strong{
+ color:#ff727b;
+ font-size:12px;
+ font-weight:400;
+ letter-spacing:2px;
+}
+
+.audio-confirm p{
+ color:#aaa;
+ font-size:10px;
+ margin:7px 0 0;
+}
+
+.audio-confirm button{
+ border-color:var(--red-light);
+}
+
+.audio-confirm button.confirm{
+ background:var(--red);
+ border-color:var(--red-light);
+}
+
+.audio-confirm button.confirm:hover{
+ background:#d12b38;
+}
+
+.audio-button-active{
+ border-color:var(--red-light);
+ color:#ff737d;
+}
+
+body.audio-mode{
+ background:#190608;
+ animation:screenShake .16s infinite;
+}
+
+body.audio-mode header,
+body.audio-mode .person,
+body.audio-mode .panel,
+body.audio-mode hr{
+ border-color:#711923;
+}
+
+body.audio-mode h1,
+body.audio-mode header small{
+ color:#e36b74;
+}
+
+body.audio-mode .person{
+ background:#20090c;
+}
+
+body.audio-mode .dot{
+ border-color:#e04450;
+}
+
+body.audio-mode .dot.active{
+ background:#e04450;
+}
+
+body.audio-mode button{
+ border-color:#8e2932;
+}
+
+body.audio-mode button:hover{
+ border-color:#ff727b;
+}
+
+body.audio-mode .audio-instructions{
+ color:#ff737d;
+}
+
+@keyframes screenShake{
+ 0%{transform:translate(0,0)}
+ 25%{transform:translate(.7px,-.5px)}
+ 50%{transform:translate(-.5px,.7px)}
+ 75%{transform:translate(.5px,.4px)}
+ 100%{transform:translate(0,0)}
+}
+
+@media(max-width:550px){
+ .grid{grid-template-columns:1fr}
+ h1{font-size:30px}
+ .person{gap:10px}
+ .portrait{width:55px;height:65px}
+}
 </style>
 </head>
+
 <body>
 <main>
+
 <header>
  <div class="row between">
   <small>R / DATABASE</small>
   <small id="soundStatus">SOM DESLIGADO</small>
  </div>
+
  <h1>RELAÇÕES</h1>
+
  <small>REGISTRO DE VÍNCULOS · ACESSO RESTRITO</small>
 </header>
 
 <hr>
 
 <section id="login" class="panel">
+
  <label>JOGADOR</label>
+
  <select id="player">
   <option value="">Selecione</option>
   <option>Lorena</option>
@@ -95,59 +338,74 @@ label{display:block;color:#888;font-size:10px;margin:15px 0 7px}
  </div>
 
  <br><br>
+
  <button id="loginBtn">ACESSAR ↗</button>
 </section>
 
 <section id="application" class="hidden">
+
  <div class="row between">
   <div>
    <small>PERSONAGEM ATIVO</small>
    <h3 id="activeName"></h3>
   </div>
+
   <div class="row">
    <button id="audioBtn">SOM OFF</button>
    <button id="exitBtn">SAIR</button>
   </div>
  </div>
+
  <hr>
 
  <section id="playerArea">
+
   <div class="row between">
    <small>RELAÇÕES</small>
    <button id="hateBtn">✳ REGISTRAR ÓDIO</button>
   </div>
+
+  <div id="audioInstructions" class="audio-instructions hidden">
+   MODO ÓDIO ATIVADO // SELECIONE UM PERSONAGEM E MARQUE OS PONTOS VERMELHOS
+  </div>
+
   <br>
+
   <div id="people" class="grid"></div>
+
+  <div id="audioConfirm" class="audio-confirm hidden">
+   <div>
+    <strong>VOCÊ TEM CERTEZA?</strong>
+    <p id="audioConfirmText">Confirme o registro de ódio.</p>
+   </div>
+
+   <div class="row">
+    <button id="confirmHate" class="confirm">CONFIRMAR</button>
+    <button id="cancelHate">VOLTAR AO NORMAL</button>
+   </div>
+  </div>
+
  </section>
 
  <section id="masterArea" class="hidden">
+
   <small>CONTROLE DO MESTRE</small>
+
   <label>PERSONAGEM</label>
   <select id="masterSelect"></select>
+
   <br><br>
+
   <div id="masterPeople" class="grid"></div>
+
   <hr>
+
   <small>HISTÓRICO</small>
   <div id="history"></div>
- </section>
-</section>
 
-<div id="modal" class="modal hidden">
- <div class="modalbox">
-  <small>REGISTRO EXTRAORDINÁRIO</small>
-  <h2 style="font-weight:300">PONTOS DE ÓDIO</h2>
-  <p>Você tem certeza de que deseja registrar ódio?</p>
-  <label>PERSONAGEM</label>
-  <select id="hateTarget"></select>
-  <label>QUANTIDADE DE PONTOS</label>
-  <div id="hateDots" class="dots"></div>
-  <br><br>
-  <div class="row">
-   <button id="confirmHate">CONFIRMAR</button>
-   <button id="cancelHate">CANCELAR</button>
-  </div>
- </div>
-</div>
+ </section>
+
+</section>
 </main>
 
 <script>
@@ -162,242 +420,560 @@ const roster={
 };
 
 const npcs=["Lisandre","Kalel"];
+
 const allCharacters=[
- ...Object.values(roster).filter((v)=>v!==roster.Mestre).flat(),
+ ...roster.Lorena,
+ ...roster.Louanne,
+ ...roster.Aida,
+ ...roster.Napo,
+ ...roster.VH,
+ ...roster.Maya,
  ...npcs
 ];
 
 let current="";
 let master=false;
-let hateValue=0;
+let hateMode=false;
+let selectedTarget="";
+let selectedHateValue=0;
 let soundOn=false;
+
 let audioContext=null;
 let ambientNodes=[];
+let metalInterval=null;
+let metalStep=0;
 
-let data=JSON.parse(localStorage.getItem("relacoes_data")||
- '{"relations":{},"history":[]}');
+let data=JSON.parse(
+ localStorage.getItem("relacoes_data")||
+ '{"relations":{},"history":[]}'
+);
+
+const $=id=>document.getElementById(id);
 
 function save(){
  localStorage.setItem("relacoes_data",JSON.stringify(data));
 }
 
 function getRelation(a,b){
- return data.relations[a+"|"+b]||{trust:0,hate:0};
+ return data.relations[a+"|"+b]||{
+  trust:0,
+  hate:0
+ };
 }
 
 function record(a,b,type,value){
  data.history.unshift({
   date:new Date().toLocaleString("pt-BR"),
-  actor:a,target:b,type,value
+  actor:a,
+  target:b,
+  type,
+  value
  });
+
  save();
 }
 
-const $=id=>document.getElementById(id);
+function audio(){
+ if(!audioContext){
+  const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+  if(!AudioContextClass)return null;
+  audioContext=new AudioContextClass();
+ }
+
+ if(audioContext.state==="suspended"){
+  audioContext.resume();
+ }
+
+ return audioContext;
+}
+
+/* LOGIN */
 
 $("player").onchange=()=>{
- let p=$("player").value;
- $("charBox").classList.toggle("hidden",!p||p==="Mestre");
- $("passBox").classList.toggle("hidden",p!=="Mestre");
+ const p=$("player").value;
+
+ $("charBox").classList.toggle(
+  "hidden",
+  !p||p==="Mestre"
+ );
+
+ $("passBox").classList.toggle(
+  "hidden",
+  p!=="Mestre"
+ );
+
  $("character").innerHTML="";
+
  (roster[p]||[]).forEach(c=>{
   $("character").add(new Option(c,c));
  });
 };
 
 $("loginBtn").onclick=()=>{
- let p=$("player").value;
- if(!p)return alert("Selecione um jogador.");
+ const p=$("player").value;
+
+ if(!p){
+  alert("Selecione um jogador.");
+  return;
+ }
 
  master=p==="Mestre";
 
- if(master&&$("password").value!=="relacoes")
-  return alert("Senha incorreta.");
+ if(master&&$("password").value!=="relacoes"){
+  alert("Senha incorreta.");
+  return;
+ }
 
  current=master?"Lisandre":$("character").value;
 
+ if(!master&&!current){
+  alert("Selecione seu personagem.");
+  return;
+ }
+
  $("login").classList.add("hidden");
  $("application").classList.remove("hidden");
+
  $("playerArea").classList.toggle("hidden",master);
  $("masterArea").classList.toggle("hidden",!master);
+
  $("activeName").textContent=master?"MESTRE":current;
 
- if(master)renderMaster();
- else renderPlayer();
+ if(master){
+  renderMaster();
+ }else{
+  renderPlayer();
+ }
 };
 
 $("exitBtn").onclick=()=>{
+ exitAudioMode();
+
+ stopAmbient();
+
+ soundOn=false;
+ $("audioBtn").textContent="SOM OFF";
+ $("soundStatus").textContent="SOM DESLIGADO";
+
  $("application").classList.add("hidden");
  $("login").classList.remove("hidden");
  $("password").value="";
 };
 
-function createDots(parent,value,max,color,callback){
+/* PONTOS */
+
+function createDots(parent,value,max,color,callback,disabled=false){
  parent.innerHTML="";
+
  for(let i=1;i<=max;i++){
-  let b=document.createElement("button");
-  b.className="dot "+(color==="red"?"red":"")+(i<=value?" active":"");
-  b.onclick=()=>callback(i);
+  const b=document.createElement("button");
+
+  b.type="button";
+
+  b.className="dot";
+
+  if(color==="red")b.classList.add("red");
+  if(color==="audio")b.classList.add("audio-dot");
+  if(i<=value)b.classList.add("active");
+
+  b.disabled=disabled;
+
+  b.onclick=()=>{
+   if(!disabled&&callback)callback(i);
+  };
+
   parent.append(b);
  }
 }
 
+/* RELAÇÕES DOS JOGADORES */
+
 function renderPlayer(){
  $("people").innerHTML="";
 
- allCharacters.filter(c=>c!==current).forEach(name=>{
-  let r=getRelation(current,name);
-  let card=document.createElement("div");
+ allCharacters
+ .filter(name=>name!==current)
+ .forEach(name=>{
+
+  const r=getRelation(current,name);
+
+  const card=document.createElement("div");
   card.className="person";
+
+  if(hateMode&&selectedTarget===name){
+   card.classList.add("audio-selected");
+  }
 
   card.innerHTML=`
    <div class="portrait">RETRATO</div>
-   <div style="flex:1">
+
+   <div style="flex:1;min-width:0">
     <div class="name">${name.toUpperCase()}</div>
+
     <div class="dots trust"></div>
-    <div class="hate-label ${r.hate?"":"hidden"}">ÓDIO</div>
+
+    <div class="hate-label ${r.hate?"":"hidden"}">
+     ÓDIO
+    </div>
+
     <div class="dots hate"></div>
-   </div>`;
+   </div>
+  `;
 
-  createDots(card.querySelector(".trust"),r.trust,3,"white",n=>{
-   r.trust=n===r.trust?n-1:n;
-   data.relations[current+"|"+name]=r;
-   record(current,name,"Relação",r.trust);
-   playClick();
-   renderPlayer();
-  });
+  const trustDots=card.querySelector(".trust");
+  const hateDots=card.querySelector(".hate");
 
-  createDots(card.querySelector(".hate"),r.hate,3,"red",()=>{});
-  card.querySelector(".hate").classList.toggle("hidden",!r.hate);
+  if(hateMode){
+
+   createDots(
+    trustDots,
+    r.trust,
+    3,
+    "white",
+    null,
+    true
+   );
+
+   createDots(
+    hateDots,
+    selectedTarget===name?selectedHateValue:r.hate,
+    3,
+    "audio",
+    n=>{
+     selectedTarget=name;
+
+     selectedHateValue=
+      n===selectedHateValue&&selectedTarget===name
+      ?0:n;
+
+     $("audioConfirm").classList.remove("hidden");
+
+     $("audioConfirmText").textContent=
+      `${selectedHateValue} ponto(s) de ódio para ${name.toUpperCase()}.`;
+
+     renderPlayer();
+    }
+   );
+
+   hateDots.classList.remove("hidden");
+
+  }else{
+
+   createDots(
+    trustDots,
+    r.trust,
+    3,
+    "white",
+    n=>{
+     const value=n===r.trust?n-1:n;
+
+     r.trust=value;
+
+     data.relations[current+"|"+name]=r;
+
+     record(current,name,"Relação",value);
+
+     playClick();
+
+     renderPlayer();
+    }
+   );
+
+   createDots(
+    hateDots,
+    r.hate,
+    3,
+    "red",
+    null,
+    true
+   );
+
+   hateDots.classList.toggle("hidden",!r.hate);
+  }
+
   $("people").append(card);
  });
 }
 
+/* MODO ÓDIO / ÁUDIO */
+
 $("hateBtn").onclick=()=>{
- $("hateTarget").innerHTML="";
- allCharacters.filter(c=>c!==current).forEach(c=>{
-  $("hateTarget").add(new Option(c,c));
- });
- hateValue=0;
- createDots($("hateDots"),0,3,"red",n=>{
-  hateValue=n===hateValue?0:n;
-  createDots($("hateDots"),hateValue,3,"red",arguments[0]);
- });
- $("modal").classList.remove("hidden");
- playMetal();
+ if(hateMode){
+  exitAudioMode();
+  return;
+ }
+
+ enterAudioMode();
 };
 
-$("cancelHate").onclick=()=>$("modal").classList.add("hidden");
+function enterAudioMode(){
+ hateMode=true;
+ selectedTarget="";
+ selectedHateValue=0;
+
+ document.body.classList.add("audio-mode");
+
+ $("hateBtn").textContent="CANCELAR ÓDIO";
+ $("hateBtn").classList.add("audio-button-active");
+
+ $("audioInstructions").classList.remove("hidden");
+ $("audioConfirm").classList.add("hidden");
+
+ renderPlayer();
+
+ startMetal();
+}
+
+function exitAudioMode(){
+ hateMode=false;
+ selectedTarget="";
+ selectedHateValue=0;
+
+ document.body.classList.remove("audio-mode");
+
+ $("hateBtn").textContent="✳ REGISTRAR ÓDIO";
+ $("hateBtn").classList.remove("audio-button-active");
+
+ $("audioInstructions").classList.add("hidden");
+ $("audioConfirm").classList.add("hidden");
+
+ stopMetal();
+
+ if(current&&!master){
+  renderPlayer();
+ }
+}
+
+$("cancelHate").onclick=()=>{
+ exitAudioMode();
+};
 
 $("confirmHate").onclick=()=>{
- let target=$("hateTarget").value;
- if(!target)return;
- let r=getRelation(current,target);
- r.hate=hateValue;
+ if(!selectedTarget){
+  alert("Selecione um personagem.");
+  return;
+ }
+
+ const target=selectedTarget;
+ const value=selectedHateValue;
+
+ const r=getRelation(current,target);
+
+ r.hate=value;
+
  data.relations[current+"|"+target]=r;
- record(current,target,"Ódio",hateValue);
+
+ record(current,target,"Ódio",value);
+
  save();
- $("modal").classList.add("hidden");
+
+ exitAudioMode();
  renderPlayer();
- playMetal();
 };
+
+/* PAINEL DO MESTRE */
 
 $("masterSelect").onchange=renderMaster;
 
 function renderMaster(){
- let select=$("masterSelect");
+ const select=$("masterSelect");
+
  if(!select.options.length){
-  [...allCharacters].forEach(c=>select.add(new Option(c,c)));
+  allCharacters.forEach(c=>{
+   select.add(new Option(c,c));
+  });
  }
- let who=select.value||"Lisandre";
+
+ const who=select.value||"Lisandre";
+
  $("activeName").textContent=who;
  $("masterPeople").innerHTML="";
 
- allCharacters.filter(c=>c!==who).forEach(name=>{
-  let r=getRelation(who,name);
-  let card=document.createElement("div");
+ allCharacters
+ .filter(name=>name!==who)
+ .forEach(name=>{
+
+  const r=getRelation(who,name);
+
+  const card=document.createElement("div");
   card.className="person";
+
   card.innerHTML=`
    <div class="portrait">RETRATO</div>
-   <div>
+
+   <div style="flex:1">
     <div class="name">${name.toUpperCase()}</div>
-    <div class="dots"></div>
-    <div class="hate-label">ÓDIO: ${r.hate}</div>
-   </div>`;
-  createDots(card.querySelector(".dots"),r.trust,3,"white",()=>{});
+
+    <div class="dots trust"></div>
+
+    <div class="hate-label ${r.hate?"":"hidden"}">
+     ÓDIO: ${r.hate}
+    </div>
+
+    <div class="dots hate"></div>
+   </div>
+  `;
+
+  createDots(
+   card.querySelector(".trust"),
+   r.trust,
+   3,
+   "white",
+   null,
+   true
+  );
+
+  createDots(
+   card.querySelector(".hate"),
+   r.hate,
+   3,
+   "red",
+   null,
+   true
+  );
+
+  card.querySelector(".hate").classList.toggle(
+   "hidden",
+   !r.hate
+  );
+
   $("masterPeople").append(card);
  });
 
  $("history").innerHTML=data.history.map(h=>
-  `<div class="entry">${h.date} · ${h.actor} → ${h.target} · ${h.type}: ${h.value}</div>`
+  `<div class="entry">
+   ${h.date} · ${h.actor} → ${h.target} · ${h.type}: ${h.value}
+  </div>`
  ).join("")||"Nenhuma alteração registrada.";
 }
 
-// ÁUDIO
-function audio(){
- if(!audioContext)
-  audioContext=new(window.AudioContext||window.webkitAudioContext)();
- if(audioContext.state==="suspended")audioContext.resume();
- return audioContext;
-}
+/* EFEITOS SONOROS */
 
-function tone(freq,duration,type,volume){
- if(!soundOn)return;
- let ctx=audio(),osc=ctx.createOscillator(),gain=ctx.createGain();
+function tone(freq,duration,type,volume,delay=0){
+ const ctx=audio();
+
+ if(!ctx)return;
+
+ const osc=ctx.createOscillator();
+ const gain=ctx.createGain();
+
+ const start=ctx.currentTime+delay;
+
  osc.type=type;
- osc.frequency.value=freq;
- gain.gain.setValueAtTime(volume,ctx.currentTime);
- gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+ osc.frequency.setValueAtTime(freq,start);
+
+ gain.gain.setValueAtTime(.0001,start);
+ gain.gain.exponentialRampToValueAtTime(volume,start+.02);
+ gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+
  osc.connect(gain);
  gain.connect(ctx.destination);
- osc.start();
- osc.stop(ctx.currentTime+duration);
+
+ osc.start(start);
+ osc.stop(start+duration+.05);
 }
 
 function playClick(){
+ if(!soundOn)return;
+
  tone(680,.08,"sine",.025);
- setTimeout(()=>tone(920,.05,"sine",.015),40);
+ tone(920,.05,"sine",.015,.04);
 }
 
-function playMetal(){
- tone(155,.32,"sawtooth",.04);
- setTimeout(()=>tone(310,.28,"triangle",.035),65);
- setTimeout(()=>tone(470,.2,"triangle",.02),110);
+/* MÚSICA METAL DO MODO ÓDIO */
+
+function metalBeat(){
+ const riff=[
+  82.4,82.4,98,73.4,
+  65.4,73.4,98,82.4,
+  82.4,110,98,73.4
+ ];
+
+ const frequency=riff[metalStep%riff.length];
+
+ tone(frequency,.32,"sawtooth",.045);
+ tone(frequency*2,.24,"square",.012,.02);
+
+ if(metalStep%4===0){
+  tone(42,.16,"triangle",.04);
+ }
+
+ metalStep++;
 }
+
+function startMetal(){
+ const ctx=audio();
+
+ if(!ctx)return;
+
+ stopMetal();
+
+ metalStep=0;
+ metalBeat();
+
+ metalInterval=setInterval(metalBeat,390);
+}
+
+function stopMetal(){
+ if(metalInterval){
+  clearInterval(metalInterval);
+  metalInterval=null;
+ }
+}
+
+/* ÁUDIO AMBIENTE */
 
 function startAmbient(){
- let ctx=audio();
+ const ctx=audio();
+
+ if(!ctx)return;
+
+ stopAmbient();
+
  [55,82.4].forEach(freq=>{
-  let osc=ctx.createOscillator();
-  let gain=ctx.createGain();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+
   osc.type="sine";
   osc.frequency.value=freq;
+
   gain.gain.value=.003;
+
   osc.connect(gain);
   gain.connect(ctx.destination);
+
   osc.start();
+
   ambientNodes.push({osc,gain});
  });
 }
 
 function stopAmbient(){
- ambientNodes.forEach(n=>{
-  n.osc.stop();
-  n.gain.disconnect();
+ ambientNodes.forEach(node=>{
+  try{node.osc.stop()}catch(e){}
+  node.gain.disconnect();
  });
+
  ambientNodes=[];
 }
 
 $("audioBtn").onclick=()=>{
  soundOn=!soundOn;
+
  $("audioBtn").textContent=soundOn?"SOM ON":"SOM OFF";
- $("soundStatus").textContent=soundOn?"SOM ATIVO":"SOM DESLIGADO";
+
+ $("soundStatus").textContent=
+  soundOn?"SOM ATIVO":"SOM DESLIGADO";
+
  if(soundOn){
   audio();
   startAmbient();
   playClick();
- }else stopAmbient();
+ }else{
+  stopAmbient();
+ }
 };
+
 </script>
 </body>
 </html>
