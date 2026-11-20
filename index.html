@@ -107,11 +107,6 @@ label{
  transition:border .2s,background .2s;
 }
 
-.person.self{
- opacity:.3;
- pointer-events:none;
-}
-
 .person.audio-selected{
  border:1px solid var(--red-light);
  background:#190709;
@@ -280,6 +275,24 @@ body.audio-mode .audio-instructions{
  color:#ff737d;
 }
 
+.secret-area{
+ margin-top:20px;
+ border-top:1px solid #333;
+ padding-top:15px;
+}
+
+.secret-button{
+ color:#a71925;
+ border-color:#571018;
+ font-size:10px;
+ letter-spacing:2px;
+}
+
+.secret-button:hover{
+ background:#25080b;
+ border-color:#e04450;
+}
+
 @keyframes screenShake{
  0%{transform:translate(0,0)}
  25%{transform:translate(.7px,-.5px)}
@@ -302,13 +315,19 @@ body.audio-mode .audio-instructions{
 
 <header>
  <div class="row between">
-  <small>R / DATABASE</small>
+  <small id="secretTrigger">R / DATABASE</small>
   <small id="soundStatus">SOM DESLIGADO</small>
  </div>
 
  <h1>RELAÇÕES</h1>
 
  <small>REGISTRO DE VÍNCULOS · ACESSO RESTRITO</small>
+
+ <div id="secretArea" class="secret-area hidden">
+  <button id="deleteAllBtn" class="secret-button">
+   APAGAR BANCO DE DADOS
+  </button>
+ </div>
 </header>
 
 <hr>
@@ -420,7 +439,7 @@ const roster={
  Mestre:["Lisandre","Kalel"]
 };
 
-const npcs=["Lisandre","Kalel"];
+/* TODOS OS PERSONAGENS PARTICIPAM DAS RELAÇÕES */
 
 const allCharacters=[
  ...roster.Lorena,
@@ -429,7 +448,8 @@ const allCharacters=[
  ...roster.Napo,
  ...roster.VH,
  ...roster.Maya,
- ...npcs
+ "Lisandre",
+ "Kalel"
 ];
 
 let current="";
@@ -438,8 +458,7 @@ let hateMode=false;
 let selectedTarget="";
 let selectedHateValue=0;
 let soundOn=false;
-
-/* ÁUDIOS PERSONALIZADOS */
+let secretClicks=0;
 
 const odioAudio=new Audio("odio.mp3");
 odioAudio.loop=true;
@@ -478,6 +497,47 @@ function record(a,b,type,value){
 
  save();
 }
+
+/* BOTÃO SECRETO */
+
+$("secretTrigger").onclick=()=>{
+ secretClicks++;
+
+ if(secretClicks>=5){
+  $("secretArea").classList.remove("hidden");
+ }
+};
+
+$("deleteAllBtn").onclick=()=>{
+ const confirmed=confirm(
+  "ATENÇÃO: isso apagará TODAS as relações e todo o histórico deste navegador. Essa ação não poderá ser desfeita. Deseja continuar?"
+ );
+
+ if(!confirmed)return;
+
+ localStorage.removeItem("relacoes_data");
+
+ data={
+  relations:{},
+  history:[]
+ };
+
+ save();
+
+ exitAudioMode();
+ stopAmbient();
+
+ alert("Banco de dados apagado.");
+
+ if(master){
+  renderMaster();
+ }else if(current){
+  renderPlayer();
+ }
+
+ $("secretArea").classList.add("hidden");
+ secretClicks=0;
+};
 
 /* LOGIN */
 
@@ -685,7 +745,7 @@ function renderPlayer(){
  });
 }
 
-/* MODO ÓDIO / ÁUDIO */
+/* MODO ÓDIO */
 
 $("hateBtn").onclick=()=>{
  if(hateMode){
@@ -710,7 +770,6 @@ function enterAudioMode(){
  $("audioConfirm").classList.add("hidden");
 
  renderPlayer();
-
  startMetal();
 }
 
@@ -738,7 +797,7 @@ function startMetal(){
  odioAudio.currentTime=0;
 
  odioAudio.play().catch(error=>{
-  console.warn("Não foi possível reproduzir odio.mp3:",error);
+  console.warn("Erro ao reproduzir odio.mp3:",error);
  });
 }
 
@@ -856,7 +915,7 @@ function startAmbient(){
  ambienteAudio.currentTime=0;
 
  ambienteAudio.play().catch(error=>{
-  console.warn("Não foi possível reproduzir ambiente.mp3:",error);
+  console.warn("Erro ao reproduzir ambiente.mp3:",error);
  });
 }
 
@@ -881,7 +940,6 @@ $("audioBtn").onclick=()=>{
   stopAmbient();
  }
 };
-
 </script>
 </body>
 </html>
