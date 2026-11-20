@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -438,10 +439,15 @@ let selectedTarget="";
 let selectedHateValue=0;
 let soundOn=false;
 
-let audioContext=null;
-let ambientNodes=[];
-let metalInterval=null;
-let metalStep=0;
+/* ÁUDIOS PERSONALIZADOS */
+
+const odioAudio=new Audio("odio.mp3");
+odioAudio.loop=true;
+odioAudio.volume=0.7;
+
+const ambienteAudio=new Audio("ambiente.mp3");
+ambienteAudio.loop=true;
+ambienteAudio.volume=0.25;
 
 let data=JSON.parse(
  localStorage.getItem("relacoes_data")||
@@ -471,20 +477,6 @@ function record(a,b,type,value){
  });
 
  save();
-}
-
-function audio(){
- if(!audioContext){
-  const AudioContextClass=window.AudioContext||window.webkitAudioContext;
-  if(!AudioContextClass)return null;
-  audioContext=new AudioContextClass();
- }
-
- if(audioContext.state==="suspended"){
-  audioContext.resume();
- }
-
- return audioContext;
 }
 
 /* LOGIN */
@@ -548,7 +540,6 @@ $("loginBtn").onclick=()=>{
 
 $("exitBtn").onclick=()=>{
  exitAudioMode();
-
  stopAmbient();
 
  soundOn=false;
@@ -569,7 +560,6 @@ function createDots(parent,value,max,color,callback,disabled=false){
   const b=document.createElement("button");
 
   b.type="button";
-
   b.className="dot";
 
   if(color==="red")b.classList.add("red");
@@ -640,11 +630,13 @@ function renderPlayer(){
     3,
     "audio",
     n=>{
+     const sameTarget=selectedTarget===name;
+     const previousValue=selectedHateValue;
+
      selectedTarget=name;
 
      selectedHateValue=
-      n===selectedHateValue&&selectedTarget===name
-      ?0:n;
+      sameTarget&&n===previousValue?0:n;
 
      $("audioConfirm").classList.remove("hidden");
 
@@ -672,8 +664,6 @@ function renderPlayer(){
      data.relations[current+"|"+name]=r;
 
      record(current,name,"Relação",value);
-
-     playClick();
 
      renderPlayer();
     }
@@ -742,6 +732,19 @@ function exitAudioMode(){
  if(current&&!master){
   renderPlayer();
  }
+}
+
+function startMetal(){
+ odioAudio.currentTime=0;
+
+ odioAudio.play().catch(error=>{
+  console.warn("Não foi possível reproduzir odio.mp3:",error);
+ });
+}
+
+function stopMetal(){
+ odioAudio.pause();
+ odioAudio.currentTime=0;
 }
 
 $("cancelHate").onclick=()=>{
@@ -847,115 +850,22 @@ function renderMaster(){
  ).join("")||"Nenhuma alteração registrada.";
 }
 
-/* EFEITOS SONOROS */
-
-function tone(freq,duration,type,volume,delay=0){
- const ctx=audio();
-
- if(!ctx)return;
-
- const osc=ctx.createOscillator();
- const gain=ctx.createGain();
-
- const start=ctx.currentTime+delay;
-
- osc.type=type;
- osc.frequency.setValueAtTime(freq,start);
-
- gain.gain.setValueAtTime(.0001,start);
- gain.gain.exponentialRampToValueAtTime(volume,start+.02);
- gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
-
- osc.connect(gain);
- gain.connect(ctx.destination);
-
- osc.start(start);
- osc.stop(start+duration+.05);
-}
-
-function playClick(){
- if(!soundOn)return;
-
- tone(680,.08,"sine",.025);
- tone(920,.05,"sine",.015,.04);
-}
-
-/* MÚSICA METAL DO MODO ÓDIO */
-
-function metalBeat(){
- const riff=[
-  82.4,82.4,98,73.4,
-  65.4,73.4,98,82.4,
-  82.4,110,98,73.4
- ];
-
- const frequency=riff[metalStep%riff.length];
-
- tone(frequency,.32,"sawtooth",.045);
- tone(frequency*2,.24,"square",.012,.02);
-
- if(metalStep%4===0){
-  tone(42,.16,"triangle",.04);
- }
-
- metalStep++;
-}
-
-function startMetal(){
- const ctx=audio();
-
- if(!ctx)return;
-
- stopMetal();
-
- metalStep=0;
- metalBeat();
-
- metalInterval=setInterval(metalBeat,390);
-}
-
-function stopMetal(){
- if(metalInterval){
-  clearInterval(metalInterval);
-  metalInterval=null;
- }
-}
-
 /* ÁUDIO AMBIENTE */
 
 function startAmbient(){
- const ctx=audio();
+ ambienteAudio.currentTime=0;
 
- if(!ctx)return;
-
- stopAmbient();
-
- [55,82.4].forEach(freq=>{
-  const osc=ctx.createOscillator();
-  const gain=ctx.createGain();
-
-  osc.type="sine";
-  osc.frequency.value=freq;
-
-  gain.gain.value=.003;
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start();
-
-  ambientNodes.push({osc,gain});
+ ambienteAudio.play().catch(error=>{
+  console.warn("Não foi possível reproduzir ambiente.mp3:",error);
  });
 }
 
 function stopAmbient(){
- ambientNodes.forEach(node=>{
-  try{node.osc.stop()}catch(e){}
-  node.gain.disconnect();
- });
-
- ambientNodes=[];
+ ambienteAudio.pause();
+ ambienteAudio.currentTime=0;
 }
+
+/* CONTROLE DE SOM */
 
 $("audioBtn").onclick=()=>{
  soundOn=!soundOn;
@@ -966,9 +876,7 @@ $("audioBtn").onclick=()=>{
   soundOn?"SOM ATIVO":"SOM DESLIGADO";
 
  if(soundOn){
-  audio();
   startAmbient();
-  playClick();
  }else{
   stopAmbient();
  }
