@@ -121,6 +121,14 @@ label{
  color:#777;
  font-size:9px;
  flex-shrink:0;
+ overflow:hidden;
+}
+
+.portrait img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ display:block;
 }
 
 .name{
@@ -490,6 +498,20 @@ const allCharacters=[
  "Kalel"
 ];
 
+/* ARQUIVOS DOS RETRATOS */
+
+const portraitFiles={
+ Sol:"sol.png",
+ Arman:"armando.png",
+ Cristina:"cristina.png",
+ Isis:"isis.png",
+ Ykaro:"ykaro.png",
+ Virgulino:"virgulino.png",
+ Morgana:"morgana.png",
+ Lisandre:"lisandre.png",
+ Kalel:"kalel.png"
+};
+
 let current="";
 let playerIdentity="";
 let master=false;
@@ -776,8 +798,20 @@ function renderRelations(container,editable){
    card.classList.add("audio-selected");
   }
 
+  const portraitFile=portraitFiles[name];
+
   card.innerHTML=`
-   <div class="portrait">RETRATO</div>
+   <div class="portrait">
+    ${
+     portraitFile
+      ? `<img
+          src="${portraitFile}"
+          alt="${name}"
+          onerror="this.style.display='none';this.parentElement.textContent='RETRATO';"
+         >`
+      : "RETRATO"
+    }
+   </div>
    <div style="flex:1;min-width:0">
     <div class="name">${name.toUpperCase()}</div>
     <div class="dots trust"></div>
@@ -1015,27 +1049,25 @@ function renderHistory(){
   `<div class="entry">
    ${h.date} · ${h.actor} → ${h.target} · ${h.type}: ${h.value}
   </div>`
- ).join("")||"Nenhuma alteração registrada.";
+ ) ).join("")||"Nenhuma alteração registrada.";
 }
 
+/* APAGAR HISTÓRICO */
+
 $("clearHistoryBtn").onclick=()=>{
- const confirmed=confirm(
-  `Deseja apagar somente o histórico de ${current}? Os pontos das relações serão mantidos.`
+ if(!confirm("Deseja apagar o histórico?"))return;
+
+ data.history=data.history.filter(
+  h=>h.actor!==current
  );
 
- if(!confirmed)return;
-
- data.history=data.history.filter(h=>h.actor!==current);
  save();
-
  renderHistory();
- alert("Histórico do personagem apagado. Os pontos foram preservados.");
 };
 
-/* ÁUDIO AMBIENTE */
+/* SOM AMBIENTE */
 
 function startAmbient(){
- ambienteAudio.currentTime=0;
  ambienteAudio.play().catch(error=>{
   console.warn("Erro ao reproduzir ambiente.mp3:",error);
  });
@@ -1046,17 +1078,20 @@ function stopAmbient(){
  ambienteAudio.currentTime=0;
 }
 
-/* CONTROLE DE SOM */
+/* CONTROLE DO SOM */
 
 $("audioBtn").onclick=()=>{
  soundOn=!soundOn;
 
- $("audioBtn").textContent=soundOn?"SOM ON":"SOM OFF";
- $("soundStatus").textContent=
-  soundOn?"SOM ATIVO":"SOM DESLIGADO";
-
- if(soundOn)startAmbient();
- else stopAmbient();
+ if(soundOn){
+  $("audioBtn").textContent="SOM ON";
+  $("soundStatus").textContent="SOM LIGADO";
+  startAmbient();
+ }else{
+  $("audioBtn").textContent="SOM OFF";
+  $("soundStatus").textContent="SOM DESLIGADO";
+  stopAmbient();
+ }
 };
 
 /* TROCA DE IDENTIDADE PELO NOME */
