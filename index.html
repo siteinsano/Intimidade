@@ -73,7 +73,6 @@ input,select,button{
 
 button{cursor:pointer}
 button:hover{border-color:#eee}
-
 select,input{width:100%}
 
 label{
@@ -144,20 +143,13 @@ label{
 }
 
 .dot.active{background:#eee}
-
-.dot.red{
- border-color:#b33;
-}
-
+.dot.red{border-color:#b33}
 .dot.red.active{
  background:#d22;
  border-color:#f66;
 }
 
-.dot.audio-dot{
- border-color:#e04450;
-}
-
+.dot.audio-dot{border-color:#e04450}
 .dot.audio-dot.active{
  background:#e04450;
  border-color:#ff7b83;
@@ -182,6 +174,7 @@ label{
  padding:12px 0;
  font-size:11px;
  color:#aaa;
+ line-height:1.6;
 }
 
 .audio-instructions{
@@ -189,6 +182,7 @@ label{
  font-size:10px;
  letter-spacing:2px;
  margin:20px 0;
+ line-height:1.6;
 }
 
 .audio-confirm{
@@ -216,18 +210,13 @@ label{
  margin:7px 0 0;
 }
 
-.audio-confirm button{
- border-color:var(--red-light);
-}
-
+.audio-confirm button{border-color:var(--red-light)}
 .audio-confirm button.confirm{
  background:var(--red);
  border-color:var(--red-light);
 }
 
-.audio-confirm button.confirm:hover{
- background:#d12b38;
-}
+.audio-confirm button.confirm:hover{background:#d12b38}
 
 .audio-button-active{
  border-color:var(--red-light);
@@ -247,50 +236,70 @@ body.audio-mode hr{
 }
 
 body.audio-mode h1,
-body.audio-mode header small{
- color:#e36b74;
+body.audio-mode header small{color:#e36b74}
+
+body.audio-mode .person{background:#20090c}
+body.audio-mode .dot{border-color:#e04450}
+body.audio-mode .dot.active{background:#e04450}
+
+body.audio-mode button{border-color:#8e2932}
+body.audio-mode button:hover{border-color:#ff727b}
+body.audio-mode .audio-instructions{color:#ff737d}
+
+.tabs{
+ display:flex;
+ gap:5px;
+ border-bottom:1px solid #333;
+ margin:18px 0 22px;
 }
 
-body.audio-mode .person{
- background:#20090c;
+.tab{
+ background:#0b0b0b;
+ border:1px solid #333;
+ border-bottom:0;
+ padding:12px 18px;
+ color:#777;
 }
 
-body.audio-mode .dot{
- border-color:#e04450;
+.tab.active{
+ color:#fff;
+ background:#171717;
+ border-color:#777;
 }
 
-body.audio-mode .dot.active{
- background:#e04450;
+.master-controls{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ margin:18px 0;
 }
 
-body.audio-mode button{
- border-color:#8e2932;
+.master-controls button{
+ flex:1;
+ min-width:120px;
 }
 
-body.audio-mode button:hover{
- border-color:#ff727b;
-}
-
-body.audio-mode .audio-instructions{
+.master-controls button.active{
+ border-color:var(--red-light);
  color:#ff737d;
 }
 
-.secret-area{
+.history-panel{
  margin-top:20px;
- border-top:1px solid #333;
- padding-top:15px;
+ padding:18px;
+ border:1px solid #333;
 }
 
-.secret-button{
- color:#a71925;
- border-color:#571018;
+.danger-button{
+ color:#e36b74;
+ border-color:#71202a;
+}
+
+.status{
+ color:#aaa;
  font-size:10px;
- letter-spacing:2px;
-}
-
-.secret-button:hover{
- background:#25080b;
- border-color:#e04450;
+ margin:12px 0;
+ letter-spacing:1px;
 }
 
 @keyframes screenShake{
@@ -306,6 +315,7 @@ body.audio-mode .audio-instructions{
  h1{font-size:30px}
  .person{gap:10px}
  .portrait{width:55px;height:65px}
+ .master-controls button{min-width:100px}
 }
 </style>
 </head>
@@ -315,25 +325,17 @@ body.audio-mode .audio-instructions{
 
 <header>
  <div class="row between">
-  <small id="secretTrigger">R / DATABASE</small>
+  <small>R / DATABASE</small>
   <small id="soundStatus">SOM DESLIGADO</small>
  </div>
 
  <h1>RELAÇÕES</h1>
-
  <small>REGISTRO DE VÍNCULOS · ACESSO RESTRITO</small>
-
- <div id="secretArea" class="secret-area hidden">
-  <button id="deleteAllBtn" class="secret-button">
-   APAGAR BANCO DE DADOS
-  </button>
- </div>
 </header>
 
 <hr>
 
 <section id="login" class="panel">
-
  <label>JOGADOR</label>
 
  <select id="player">
@@ -357,17 +359,23 @@ body.audio-mode .audio-instructions{
   <input id="password" type="password">
  </div>
 
- <br><br>
+ <div id="identityPassBox" class="hidden">
+  <label>SENHA PARA TROCAR DE JOGADOR</label>
+  <input id="identityPassword" type="password"
+   placeholder="Digite a senha secreta">
+ </div>
 
+ <br><br>
  <button id="loginBtn">ACESSAR ↗</button>
+ <p id="loginStatus" class="status"></p>
 </section>
 
 <section id="application" class="hidden">
 
  <div class="row between">
   <div>
-   <small>PERSONAGEM ATIVO</small>
-   <h3 id="activeName"></h3>
+   <small>JOGADOR</small>
+   <h3 id="playerName"></h3>
   </div>
 
   <div class="row">
@@ -376,10 +384,18 @@ body.audio-mode .audio-instructions{
   </div>
  </div>
 
+ <div id="tabs" class="tabs"></div>
+
+ <div class="row between">
+  <div>
+   <small>PERSONAGEM ATIVO</small>
+   <h3 id="activeName"></h3>
+  </div>
+ </div>
+
  <hr>
 
  <section id="playerArea">
-
   <div class="row between">
    <small>RELAÇÕES</small>
    <button id="hateBtn">✳ REGISTRAR ÓDIO</button>
@@ -390,7 +406,6 @@ body.audio-mode .audio-instructions{
   </div>
 
   <br>
-
   <div id="people" class="grid"></div>
 
   <div id="audioConfirm" class="audio-confirm hidden">
@@ -404,25 +419,50 @@ body.audio-mode .audio-instructions{
     <button id="cancelHate">VOLTAR AO NORMAL</button>
    </div>
   </div>
-
  </section>
 
  <section id="masterArea" class="hidden">
-
   <small>CONTROLE DO MESTRE</small>
 
-  <label>PERSONAGEM</label>
-  <select id="masterSelect"></select>
+  <div class="master-controls">
+   <button id="modifyBtn">MODIFICAR</button>
+   <button id="saveBtn">SALVAR</button>
+   <button id="historyBtn">VISUALIZAR HISTÓRICO</button>
+   <button id="clearHistoryBtn" class="danger-button">APAGAR HISTÓRICO</button>
+  </div>
 
-  <br><br>
+  <p id="masterStatus" class="status">Modo de visualização.</p>
+
+  <div class="row between">
+   <small>RELAÇÕES DO PERSONAGEM</small>
+   <button id="masterHateBtn">✳ REGISTRAR ÓDIO</button>
+  </div>
 
   <div id="masterPeople" class="grid"></div>
 
-  <hr>
+  <div id="masterAudioInstructions" class="audio-instructions hidden">
+   MODO ÓDIO ATIVADO // SELECIONE UM PERSONAGEM E MARQUE OS PONTOS VERMELHOS
+  </div>
 
-  <small>HISTÓRICO</small>
-  <div id="history"></div>
+  <div id="masterAudioConfirm" class="audio-confirm hidden">
+   <div>
+    <strong>VOCÊ TEM CERTEZA?</strong>
+    <p id="masterAudioConfirmText"></p>
+   </div>
 
+   <div class="row">
+    <button id="masterConfirmHate" class="confirm">CONFIRMAR</button>
+    <button id="masterCancelHate">VOLTAR AO NORMAL</button>
+   </div>
+  </div>
+
+  <section id="historyPanel" class="history-panel hidden">
+   <div class="row between">
+    <small id="historyTitle">HISTÓRICO</small>
+    <button id="closeHistoryBtn">FECHAR</button>
+   </div>
+   <div id="history"></div>
+  </section>
  </section>
 
 </section>
@@ -439,8 +479,6 @@ const roster={
  Mestre:["Lisandre","Kalel"]
 };
 
-/* TODOS OS PERSONAGENS PARTICIPAM DAS RELAÇÕES */
-
 const allCharacters=[
  ...roster.Lorena,
  ...roster.Louanne,
@@ -453,12 +491,14 @@ const allCharacters=[
 ];
 
 let current="";
+let playerIdentity="";
 let master=false;
 let hateMode=false;
 let selectedTarget="";
 let selectedHateValue=0;
 let soundOn=false;
-let secretClicks=0;
+let editingEnabled=false;
+let historyVisible=false;
 
 const odioAudio=new Audio("ódio.mp3");
 odioAudio.loop=true;
@@ -468,10 +508,16 @@ const ambienteAudio=new Audio("ambiente.mp3");
 ambienteAudio.loop=true;
 ambienteAudio.volume=0.25;
 
-let data=JSON.parse(
- localStorage.getItem("relacoes_data")||
- '{"relations":{},"history":[]}'
-);
+let data;
+
+try{
+ data=JSON.parse(localStorage.getItem("relacoes_data"))||{};
+}catch(e){
+ data={};
+}
+
+if(!data.relations)data.relations={};
+if(!data.history)data.history=[];
 
 const $=id=>document.getElementById(id);
 
@@ -494,55 +540,26 @@ function record(a,b,type,value){
   type,
   value
  });
-
  save();
 }
 
-/* BOTÃO SECRETO */
+function getSavedIdentity(){
+ return localStorage.getItem("relacoes_identity")||"";
+}
 
-$("secretTrigger").onclick=()=>{
- secretClicks++;
+function setSavedIdentity(name){
+ localStorage.setItem("relacoes_identity",name);
+}
 
- if(secretClicks>=5){
-  $("secretArea").classList.remove("hidden");
- }
-};
+function getCharacters(){
+ return roster[playerIdentity]||[];
+}
 
-$("deleteAllBtn").onclick=()=>{
- const confirmed=confirm(
-  "ATENÇÃO: isso apagará TODAS as relações e todo o histórico deste navegador. Essa ação não poderá ser desfeita. Deseja continuar?"
- );
-
- if(!confirmed)return;
-
- localStorage.removeItem("relacoes_data");
-
- data={
-  relations:{},
-  history:[]
- };
-
- save();
-
- exitAudioMode();
- stopAmbient();
-
- alert("Banco de dados apagado.");
-
- if(master){
-  renderMaster();
- }else if(current){
-  renderPlayer();
- }
-
- $("secretArea").classList.add("hidden");
- secretClicks=0;
-};
-
-/* LOGIN */
+/* LOGIN E IDENTIDADE */
 
 $("player").onchange=()=>{
  const p=$("player").value;
+ const saved=getSavedIdentity();
 
  $("charBox").classList.toggle(
   "hidden",
@@ -554,11 +571,23 @@ $("player").onchange=()=>{
   p!=="Mestre"
  );
 
+ $("identityPassBox").classList.toggle(
+  "hidden",
+  !p||p==="Mestre"||!saved||p===saved
+ );
+
  $("character").innerHTML="";
 
  (roster[p]||[]).forEach(c=>{
   $("character").add(new Option(c,c));
  });
+
+ $("loginStatus").textContent="";
+
+ if(saved&&p&&p!=="Mestre"&&p!==saved){
+  $("loginStatus").textContent=
+   "Para trocar de jogador, informe a senha secreta.";
+ }
 };
 
 $("loginBtn").onclick=()=>{
@@ -576,20 +605,43 @@ $("loginBtn").onclick=()=>{
   return;
  }
 
- current=master?"Lisandre":$("character").value;
+ const saved=getSavedIdentity();
 
- if(!master&&!current){
-  alert("Selecione seu personagem.");
-  return;
+ if(!master&&saved&&p!==saved){
+  if($("identityPassword").value!=="resetar 666"){
+   alert("Senha incorreta. Não é possível trocar de jogador.");
+   return;
+  }
  }
+
+ if(!master){
+  playerIdentity=p;
+  current=$("character").value;
+
+  if(!current){
+   alert("Selecione seu personagem.");
+   return;
+  }
+
+  setSavedIdentity(p);
+ }else{
+  playerIdentity="Mestre";
+  current="Lisandre";
+ }
+
+ editingEnabled=false;
+ historyVisible=false;
 
  $("login").classList.add("hidden");
  $("application").classList.remove("hidden");
 
+ $("playerName").textContent=playerIdentity.toUpperCase();
+
  $("playerArea").classList.toggle("hidden",master);
  $("masterArea").classList.toggle("hidden",!master);
 
- $("activeName").textContent=master?"MESTRE":current;
+ renderTabs();
+ updateActiveName();
 
  if(master){
   renderMaster();
@@ -598,18 +650,92 @@ $("loginBtn").onclick=()=>{
  }
 };
 
-$("exitBtn").onclick=()=>{
+/* ABAS DE PERSONAGENS */
+
+function renderTabs(){
+ const tabs=$("tabs");
+ tabs.innerHTML="";
+
+ getCharacters().forEach(character=>{
+  const button=document.createElement("button");
+  button.className="tab";
+  button.textContent=character;
+
+  if(character===current)button.classList.add("active");
+
+  button.onclick=()=>{
+   if(character===current)return;
+
+   exitAudioMode();
+   current=character;
+
+   renderTabs();
+   updateActiveName();
+
+   if(master)renderMaster();
+   else renderPlayer();
+  };
+
+  tabs.append(button);
+ });
+}
+
+function updateActiveName(){
+ $("activeName").textContent=current.toUpperCase();
+}
+
+/* TROCA DE JOGADOR */
+
+function resetIdentity(){
+ const password=prompt("Digite a senha para trocar de jogador:");
+
+ if(password!=="resetar 666"){
+  alert("Senha incorreta.");
+  return;
+ }
+
+ const newPlayer=prompt(
+  "Digite o nome do novo jogador:\n"+
+  Object.keys(roster).filter(p=>p!=="Mestre").join(", ")
+ );
+
+ if(!newPlayer||!roster[newPlayer]||newPlayer==="Mestre"){
+  alert("Nome de jogador inválido.");
+  return;
+ }
+
+ setSavedIdentity(newPlayer);
+ alert("Identidade alterada. Entre novamente com o novo jogador.");
+
+ exitApplication();
+}
+
+/* SAIR */
+
+function exitApplication(){
  exitAudioMode();
  stopAmbient();
 
  soundOn=false;
+ editingEnabled=false;
+ historyVisible=false;
+
  $("audioBtn").textContent="SOM OFF";
  $("soundStatus").textContent="SOM DESLIGADO";
 
  $("application").classList.add("hidden");
  $("login").classList.remove("hidden");
+
  $("password").value="";
-};
+ $("identityPassword").value="";
+ $("player").value="";
+ $("charBox").classList.add("hidden");
+ $("passBox").classList.add("hidden");
+ $("identityPassBox").classList.add("hidden");
+ $("loginStatus").textContent="";
+}
+
+$("exitBtn").onclick=exitApplication;
 
 /* PONTOS */
 
@@ -618,7 +744,6 @@ function createDots(parent,value,max,color,callback,disabled=false){
 
  for(let i=1;i<=max;i++){
   const b=document.createElement("button");
-
   b.type="button";
   b.className="dot";
 
@@ -636,15 +761,12 @@ function createDots(parent,value,max,color,callback,disabled=false){
  }
 }
 
-/* RELAÇÕES DOS JOGADORES */
+/* RENDERIZAÇÃO DAS RELAÇÕES */
 
-function renderPlayer(){
- $("people").innerHTML="";
+function renderRelations(container,editable){
+ container.innerHTML="";
 
- allCharacters
- .filter(name=>name!==current)
- .forEach(name=>{
-
+ allCharacters.filter(name=>name!==current).forEach(name=>{
   const r=getRelation(current,name);
 
   const card=document.createElement("div");
@@ -656,16 +778,12 @@ function renderPlayer(){
 
   card.innerHTML=`
    <div class="portrait">RETRATO</div>
-
    <div style="flex:1;min-width:0">
     <div class="name">${name.toUpperCase()}</div>
-
     <div class="dots trust"></div>
-
     <div class="hate-label ${r.hate?"":"hidden"}">
      ÓDIO
     </div>
-
     <div class="dots hate"></div>
    </div>
   `;
@@ -674,14 +792,8 @@ function renderPlayer(){
   const hateDots=card.querySelector(".hate");
 
   if(hateMode){
-
    createDots(
-    trustDots,
-    r.trust,
-    3,
-    "white",
-    null,
-    true
+    trustDots,r.trust,3,"white",null,true
    );
 
    createDots(
@@ -694,69 +806,70 @@ function renderPlayer(){
      const previousValue=selectedHateValue;
 
      selectedTarget=name;
-
      selectedHateValue=
       sameTarget&&n===previousValue?0:n;
 
-     $("audioConfirm").classList.remove("hidden");
+     const confirm=$("masterArea").classList.contains("hidden")
+      ?$("audioConfirm")
+      :$("masterAudioConfirm");
 
-     $("audioConfirmText").textContent=
+     const text=$("masterArea").classList.contains("hidden")
+      ?$("audioConfirmText")
+      :$("masterAudioConfirmText");
+
+     confirm.classList.remove("hidden");
+     text.textContent=
       `${selectedHateValue} ponto(s) de ódio para ${name.toUpperCase()}.`;
 
-     renderPlayer();
+     renderCurrentView();
     }
    );
 
    hateDots.classList.remove("hidden");
-
   }else{
-
    createDots(
     trustDots,
     r.trust,
     3,
     "white",
-    n=>{
+    editable?n=>{
      const value=n===r.trust?n-1:n;
-
      r.trust=value;
-
      data.relations[current+"|"+name]=r;
-
      record(current,name,"Relação",value);
-
-     renderPlayer();
-    }
+     renderCurrentView();
+    }:null,
+    !editable
    );
 
    createDots(
-    hateDots,
-    r.hate,
-    3,
-    "red",
-    null,
-    true
+    hateDots,r.hate,3,"red",null,true
    );
 
    hateDots.classList.toggle("hidden",!r.hate);
   }
 
-  $("people").append(card);
+  container.append(card);
  });
+}
+
+function renderCurrentView(){
+ if(master)renderMaster();
+ else renderPlayer();
+}
+
+function renderPlayer(){
+ renderRelations($("people"),true);
 }
 
 /* MODO ÓDIO */
 
-$("hateBtn").onclick=()=>{
- if(hateMode){
-  exitAudioMode();
+function enterAudioMode(){
+ if(master&&!editingEnabled){
+  alert("Clique em MODIFICAR antes de editar.");
   return;
  }
 
- enterAudioMode();
-};
-
-function enterAudioMode(){
  hateMode=true;
  selectedTarget="";
  selectedHateValue=0;
@@ -765,11 +878,16 @@ function enterAudioMode(){
 
  $("hateBtn").textContent="CANCELAR ÓDIO";
  $("hateBtn").classList.add("audio-button-active");
+ $("masterHateBtn").textContent="CANCELAR ÓDIO";
+ $("masterHateBtn").classList.add("audio-button-active");
 
  $("audioInstructions").classList.remove("hidden");
- $("audioConfirm").classList.add("hidden");
+ $("masterAudioInstructions").classList.remove("hidden");
 
- renderPlayer();
+ $("audioConfirm").classList.add("hidden");
+ $("masterAudioConfirm").classList.add("hidden");
+
+ renderCurrentView();
  startMetal();
 }
 
@@ -782,22 +900,22 @@ function exitAudioMode(){
 
  $("hateBtn").textContent="✳ REGISTRAR ÓDIO";
  $("hateBtn").classList.remove("audio-button-active");
+ $("masterHateBtn").textContent="✳ REGISTRAR ÓDIO";
+ $("masterHateBtn").classList.remove("audio-button-active");
 
  $("audioInstructions").classList.add("hidden");
+ $("masterAudioInstructions").classList.add("hidden");
+
  $("audioConfirm").classList.add("hidden");
+ $("masterAudioConfirm").classList.add("hidden");
 
  stopMetal();
-
- if(current&&!master){
-  renderPlayer();
- }
 }
 
 function startMetal(){
  odioAudio.currentTime=0;
-
  odioAudio.play().catch(error=>{
-  console.warn("Erro ao reproduzir odio.mp3:",error);
+  console.warn("Erro ao reproduzir ódio.mp3:",error);
  });
 }
 
@@ -806,11 +924,20 @@ function stopMetal(){
  odioAudio.currentTime=0;
 }
 
-$("cancelHate").onclick=()=>{
- exitAudioMode();
+$("hateBtn").onclick=()=>{
+ if(hateMode)exitAudioMode();
+ else enterAudioMode();
 };
 
-$("confirmHate").onclick=()=>{
+$("masterHateBtn").onclick=()=>{
+ if(hateMode)exitAudioMode();
+ else enterAudioMode();
+};
+
+$("cancelHate").onclick=exitAudioMode;
+$("masterCancelHate").onclick=exitAudioMode;
+
+function confirmHate(){
  if(!selectedTarget){
   alert("Selecione um personagem.");
   return;
@@ -818,102 +945,97 @@ $("confirmHate").onclick=()=>{
 
  const target=selectedTarget;
  const value=selectedHateValue;
-
  const r=getRelation(current,target);
 
  r.hate=value;
-
  data.relations[current+"|"+target]=r;
 
  record(current,target,"Ódio",value);
-
- save();
-
  exitAudioMode();
- renderPlayer();
-};
+ renderCurrentView();
+}
+
+$("confirmHate").onclick=confirmHate;
+$("masterConfirmHate").onclick=confirmHate;
 
 /* PAINEL DO MESTRE */
 
-$("masterSelect").onchange=renderMaster;
-
 function renderMaster(){
- const select=$("masterSelect");
+ renderRelations($("masterPeople"),editingEnabled);
 
- if(!select.options.length){
-  allCharacters.forEach(c=>{
-   select.add(new Option(c,c));
-  });
- }
+ $("modifyBtn").classList.toggle("active",editingEnabled);
+ $("masterStatus").textContent=editingEnabled
+  ?"Modo de edição ativo. As alterações são salvas automaticamente."
+  :"Modo de visualização.";
 
- const who=select.value||"Lisandre";
+ $("historyTitle").textContent="HISTÓRICO GERAL";
 
- $("activeName").textContent=who;
- $("masterPeople").innerHTML="";
+ if(historyVisible)renderHistory();
+}
 
- allCharacters
- .filter(name=>name!==who)
- .forEach(name=>{
+$("modifyBtn").onclick=()=>{
+ if(hateMode)exitAudioMode();
 
-  const r=getRelation(who,name);
+ editingEnabled=!editingEnabled;
 
-  const card=document.createElement("div");
-  card.className="person";
+ renderMaster();
+};
 
-  card.innerHTML=`
-   <div class="portrait">RETRATO</div>
+$("saveBtn").onclick=()=>{
+ save();
+ editingEnabled=false;
+ $("masterStatus").textContent="Dados salvos.";
+ renderMaster();
+};
 
-   <div style="flex:1">
-    <div class="name">${name.toUpperCase()}</div>
+$("historyBtn").onclick=()=>{
+ historyVisible=!historyVisible;
+ $("historyPanel").classList.toggle("hidden",!historyVisible);
 
-    <div class="dots trust"></div>
+ if(historyVisible)renderHistory();
 
-    <div class="hate-label ${r.hate?"":"hidden"}">
-     ÓDIO: ${r.hate}
-    </div>
+ $("historyBtn").textContent=
+  historyVisible?"OCULTAR HISTÓRICO":"VISUALIZAR HISTÓRICO";
+};
 
-    <div class="dots hate"></div>
-   </div>
-  `;
+$("closeHistoryBtn").onclick=()=>{
+ historyVisible=false;
+ $("historyPanel").classList.add("hidden");
+ $("historyBtn").textContent="VISUALIZAR HISTÓRICO";
+};
 
-  createDots(
-   card.querySelector(".trust"),
-   r.trust,
-   3,
-   "white",
-   null,
-   true
-  );
+/* HISTÓRICO GERAL: MOSTRA ALTERAÇÕES DE TODOS */
 
-  createDots(
-   card.querySelector(".hate"),
-   r.hate,
-   3,
-   "red",
-   null,
-   true
-  );
+function renderHistory(){
+ const entries=data.history;
 
-  card.querySelector(".hate").classList.toggle(
-   "hidden",
-   !r.hate
-  );
+ $("historyTitle").textContent="HISTÓRICO GERAL";
 
-  $("masterPeople").append(card);
- });
-
- $("history").innerHTML=data.history.map(h=>
+ $("history").innerHTML=entries.map(h=>
   `<div class="entry">
    ${h.date} · ${h.actor} → ${h.target} · ${h.type}: ${h.value}
   </div>`
  ).join("")||"Nenhuma alteração registrada.";
 }
 
+$("clearHistoryBtn").onclick=()=>{
+ const confirmed=confirm(
+  `Deseja apagar somente o histórico de ${current}? Os pontos das relações serão mantidos.`
+ );
+
+ if(!confirmed)return;
+
+ data.history=data.history.filter(h=>h.actor!==current);
+ save();
+
+ renderHistory();
+ alert("Histórico do personagem apagado. Os pontos foram preservados.");
+};
+
 /* ÁUDIO AMBIENTE */
 
 function startAmbient(){
  ambienteAudio.currentTime=0;
-
  ambienteAudio.play().catch(error=>{
   console.warn("Erro ao reproduzir ambiente.mp3:",error);
  });
@@ -930,16 +1052,20 @@ $("audioBtn").onclick=()=>{
  soundOn=!soundOn;
 
  $("audioBtn").textContent=soundOn?"SOM ON":"SOM OFF";
-
  $("soundStatus").textContent=
   soundOn?"SOM ATIVO":"SOM DESLIGADO";
 
- if(soundOn){
-  startAmbient();
- }else{
-  stopAmbient();
- }
+ if(soundOn)startAmbient();
+ else stopAmbient();
 };
+
+/* TROCA DE IDENTIDADE PELO NOME */
+
+$("player").addEventListener("dblclick",()=>{
+ if(!getSavedIdentity())return;
+ resetIdentity();
+});
 </script>
+
 </body>
 </html>
