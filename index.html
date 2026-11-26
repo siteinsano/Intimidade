@@ -1,315 +1,72 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RELAÇÕES</title>
-
 <style>
 *{box-sizing:border-box}
-
 :root{
- --bg:#080808;
- --card:#0d0d0d;
- --white:#eee;
- --line:#292929;
- --muted:#777;
- --red:#a71925;
- --red-light:#e04450;
+ --bg:#080808;--card:#0d0d0d;--white:#eee;
+ --line:#292929;--muted:#777;--red:#a71925;--red-light:#e04450;
 }
-
-body{
- margin:0;
- background:var(--bg);
- color:var(--white);
- font-family:Arial,sans-serif;
- letter-spacing:1px;
- transition:background .3s,color .3s;
-}
-
-main{
- max-width:850px;
- margin:auto;
- padding:25px 18px 50px;
-}
-
-header{
- border-bottom:1px solid #333;
- padding-bottom:18px;
-}
-
-h1{
- font-weight:300;
- letter-spacing:9px;
- font-size:38px;
-}
-
-h3{
- font-weight:300;
- letter-spacing:3px;
-}
-
-small,.muted{
- color:var(--muted);
- font-size:10px;
- letter-spacing:2px;
-}
-
-hr{
- border:0;
- border-top:1px solid var(--line);
- margin:25px 0;
-}
-
-input,select,button{
- background:#090909;
- color:var(--white);
- border:1px solid #444;
- padding:12px;
- font-size:12px;
- letter-spacing:1px;
-}
-
+body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif;letter-spacing:1px;transition:background .3s,color .3s}
+main{max-width:850px;margin:auto;padding:25px 18px 50px}
+header{border-bottom:1px solid #333;padding-bottom:18px}
+h1{font-weight:300;letter-spacing:9px;font-size:38px}
+h3{font-weight:300;letter-spacing:3px}
+small,.muted{color:var(--muted);font-size:10px;letter-spacing:2px}
+hr{border:0;border-top:1px solid var(--line);margin:25px 0}
+input,select,button{background:#090909;color:var(--white);border:1px solid #444;padding:12px;font-size:12px;letter-spacing:1px}
 button{cursor:pointer}
 button:hover{border-color:#eee}
 select,input{width:100%}
-
-label{
- display:block;
- color:#888;
- font-size:10px;
- margin:15px 0 7px;
-}
-
-.row{
- display:flex;
- gap:10px;
- align-items:center;
-}
-
+label{display:block;color:#888;font-size:10px;margin:15px 0 7px}
+.row{display:flex;gap:10px;align-items:center}
 .between{justify-content:space-between}
-
-.grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
-}
-
-.person{
- display:flex;
- align-items:center;
- gap:13px;
- border:1px solid var(--line);
- padding:12px;
- min-height:105px;
- transition:border .2s,background .2s;
-}
-
-.person.audio-selected{
- border:1px solid var(--red-light);
- background:#190709;
- box-shadow:inset 0 0 0 1px #571018;
-}
-
-.portrait{
- width:65px;
- height:75px;
- border:1px solid #555;
- display:grid;
- place-items:center;
- color:#777;
- font-size:9px;
- flex-shrink:0;
- overflow:hidden;
-}
-
-.portrait img{
- width:100%;
- height:100%;
- object-fit:cover;
- display:block;
-}
-
-.name{
- font-size:12px;
- margin-bottom:12px;
-}
-
-.dots{
- display:flex;
- gap:9px;
-}
-
-.dot{
- width:17px;
- height:17px;
- min-width:17px;
- border-radius:50%;
- border:1px solid #eee;
- padding:0;
-}
-
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.person{display:flex;align-items:center;gap:13px;border:1px solid var(--line);padding:12px;min-height:105px;transition:border .2s,background .2s}
+.person.audio-selected{border:1px solid var(--red-light);background:#190709;box-shadow:inset 0 0 0 1px #571018}
+.portrait{width:65px;height:75px;border:1px solid #555;display:grid;place-items:center;color:#777;font-size:9px;flex-shrink:0;overflow:hidden}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.name{font-size:12px;margin-bottom:12px}
+.dots{display:flex;gap:9px}
+.dot{width:17px;height:17px;min-width:17px;border-radius:50%;border:1px solid #eee;padding:0}
 .dot.active{background:#eee}
 .dot.red{border-color:#b33}
-.dot.red.active{
- background:#d22;
- border-color:#f66;
-}
-
+.dot.red.active{background:#d22;border-color:#f66}
 .dot.audio-dot{border-color:#e04450}
-.dot.audio-dot.active{
- background:#e04450;
- border-color:#ff7b83;
- box-shadow:0 0 7px #a71925;
-}
-
-.hate-label{
- color:#c44;
- font-size:9px;
- margin-top:8px;
-}
-
-.panel{
- border:1px solid #333;
- padding:20px;
-}
-
+.dot.audio-dot.active{background:#e04450;border-color:#ff7b83;box-shadow:0 0 7px #a71925}
+.hate-label{color:#c44;font-size:9px;margin-top:8px}
+.panel{border:1px solid #333;padding:20px}
 .hidden{display:none!important}
-
-.entry{
- border-top:1px solid #333;
- padding:12px 0;
- font-size:11px;
- color:#aaa;
- line-height:1.6;
-}
-
-.audio-instructions{
- color:#e36b74;
- font-size:10px;
- letter-spacing:2px;
- margin:20px 0;
- line-height:1.6;
-}
-
-.audio-confirm{
- margin-top:22px;
- border:1px solid var(--red);
- background:#170709;
- padding:18px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:15px;
- flex-wrap:wrap;
-}
-
-.audio-confirm strong{
- color:#ff727b;
- font-size:12px;
- font-weight:400;
- letter-spacing:2px;
-}
-
-.audio-confirm p{
- color:#aaa;
- font-size:10px;
- margin:7px 0 0;
-}
-
+.entry{border-top:1px solid #333;padding:12px 0;font-size:11px;color:#aaa;line-height:1.6}
+.audio-instructions{color:#e36b74;font-size:10px;letter-spacing:2px;margin:20px 0;line-height:1.6}
+.audio-confirm{margin-top:22px;border:1px solid var(--red);background:#170709;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.audio-confirm strong{color:#ff727b;font-size:12px;font-weight:400;letter-spacing:2px}
+.audio-confirm p{color:#aaa;font-size:10px;margin:7px 0 0}
 .audio-confirm button{border-color:var(--red-light)}
-.audio-confirm button.confirm{
- background:var(--red);
- border-color:var(--red-light);
-}
-
+.audio-confirm button.confirm{background:var(--red);border-color:var(--red-light)}
 .audio-confirm button.confirm:hover{background:#d12b38}
-
-.audio-button-active{
- border-color:var(--red-light);
- color:#ff737d;
-}
-
-body.audio-mode{
- background:#190608;
- animation:screenShake .16s infinite;
-}
-
-body.audio-mode header,
-body.audio-mode .person,
-body.audio-mode .panel,
-body.audio-mode hr{
- border-color:#711923;
-}
-
-body.audio-mode h1,
-body.audio-mode header small{color:#e36b74}
-
+.audio-button-active{border-color:var(--red-light);color:#ff737d}
+body.audio-mode{background:#190608;animation:screenShake .16s infinite}
+body.audio-mode header,body.audio-mode .person,body.audio-mode .panel,body.audio-mode hr{border-color:#711923}
+body.audio-mode h1,body.audio-mode header small{color:#e36b74}
 body.audio-mode .person{background:#20090c}
 body.audio-mode .dot{border-color:#e04450}
 body.audio-mode .dot.active{background:#e04450}
-
 body.audio-mode button{border-color:#8e2932}
 body.audio-mode button:hover{border-color:#ff727b}
 body.audio-mode .audio-instructions{color:#ff737d}
-
-.tabs{
- display:flex;
- gap:5px;
- border-bottom:1px solid #333;
- margin:18px 0 22px;
-}
-
-.tab{
- background:#0b0b0b;
- border:1px solid #333;
- border-bottom:0;
- padding:12px 18px;
- color:#777;
-}
-
-.tab.active{
- color:#fff;
- background:#171717;
- border-color:#777;
-}
-
-.master-controls{
- display:flex;
- flex-wrap:wrap;
- gap:8px;
- margin:18px 0;
-}
-
-.master-controls button{
- flex:1;
- min-width:120px;
-}
-
-.master-controls button.active{
- border-color:var(--red-light);
- color:#ff737d;
-}
-
-.history-panel{
- margin-top:20px;
- padding:18px;
- border:1px solid #333;
-}
-
-.danger-button{
- color:#e36b74;
- border-color:#71202a;
-}
-
-.status{
- color:#aaa;
- font-size:10px;
- margin:12px 0;
- letter-spacing:1px;
-}
-
+.tabs{display:flex;gap:5px;border-bottom:1px solid #333;margin:18px 0 22px}
+.tab{background:#0b0b0b;border:1px solid #333;border-bottom:0;padding:12px 18px;color:#777}
+.tab.active{color:#fff;background:#171717;border-color:#777}
+.master-controls{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+.master-controls button{flex:1;min-width:120px}
+.master-controls button.active{border-color:var(--red-light);color:#ff737d}
+.history-panel{margin-top:20px;padding:18px;border:1px solid #333}
+.danger-button{color:#e36b74;border-color:#71202a}
+.status{color:#aaa;font-size:10px;margin:12px 0;letter-spacing:1px}
 @keyframes screenShake{
  0%{transform:translate(0,0)}
  25%{transform:translate(.7px,-.5px)}
@@ -317,7 +74,6 @@ body.audio-mode .audio-instructions{color:#ff737d}
  75%{transform:translate(.5px,.4px)}
  100%{transform:translate(0,0)}
 }
-
 @media(max-width:550px){
  .grid{grid-template-columns:1fr}
  h1{font-size:30px}
@@ -327,25 +83,19 @@ body.audio-mode .audio-instructions{color:#ff737d}
 }
 </style>
 </head>
-
 <body>
 <main>
-
 <header>
  <div class="row between">
   <small>R / DATABASE</small>
   <small id="soundStatus">SOM DESLIGADO</small>
  </div>
-
  <h1>RELAÇÕES</h1>
  <small>REGISTRO DE VÍNCULOS · ACESSO RESTRITO</small>
 </header>
-
 <hr>
-
 <section id="login" class="panel">
  <label>JOGADOR</label>
-
  <select id="player">
   <option value="">Selecione</option>
   <option>Lorena</option>
@@ -356,72 +106,48 @@ body.audio-mode .audio-instructions{color:#ff737d}
   <option>Maya</option>
   <option>Mestre</option>
  </select>
-
  <div id="charBox" class="hidden">
   <label>PERSONAGEM</label>
   <select id="character"></select>
  </div>
-
  <div id="passBox" class="hidden">
   <label>SENHA DO MESTRE</label>
   <input id="password" type="password">
  </div>
-
  <div id="identityPassBox" class="hidden">
   <label>SENHA PARA TROCAR DE JOGADOR</label>
-  <input id="identityPassword" type="password"
-   placeholder="Digite a senha secreta">
+  <input id="identityPassword" type="password" placeholder="Digite a senha secreta">
  </div>
-
  <br><br>
  <button id="loginBtn">ACESSAR ↗</button>
  <p id="loginStatus" class="status"></p>
 </section>
 
 <section id="application" class="hidden">
-
  <div class="row between">
-  <div>
-   <small>JOGADOR</small>
-   <h3 id="playerName"></h3>
-  </div>
-
+  <div><small>JOGADOR</small><h3 id="playerName"></h3></div>
   <div class="row">
    <button id="audioBtn">SOM OFF</button>
    <button id="exitBtn">SAIR</button>
   </div>
  </div>
-
  <div id="tabs" class="tabs"></div>
-
  <div class="row between">
-  <div>
-   <small>PERSONAGEM ATIVO</small>
-   <h3 id="activeName"></h3>
-  </div>
+  <div><small>PERSONAGEM ATIVO</small><h3 id="activeName"></h3></div>
  </div>
-
  <hr>
-
  <section id="playerArea">
   <div class="row between">
    <small>RELAÇÕES</small>
    <button id="hateBtn">✳ REGISTRAR ÓDIO</button>
   </div>
-
   <div id="audioInstructions" class="audio-instructions hidden">
    MODO ÓDIO ATIVADO // SELECIONE UM PERSONAGEM E MARQUE OS PONTOS VERMELHOS
   </div>
-
   <br>
   <div id="people" class="grid"></div>
-
   <div id="audioConfirm" class="audio-confirm hidden">
-   <div>
-    <strong>VOCÊ TEM CERTEZA?</strong>
-    <p id="audioConfirmText">Confirme o registro de ódio.</p>
-   </div>
-
+   <div><strong>VOCÊ TEM CERTEZA?</strong><p id="audioConfirmText">Confirme o registro de ódio.</p></div>
    <div class="row">
     <button id="confirmHate" class="confirm">CONFIRMAR</button>
     <button id="cancelHate">VOLTAR AO NORMAL</button>
@@ -431,39 +157,28 @@ body.audio-mode .audio-instructions{color:#ff737d}
 
  <section id="masterArea" class="hidden">
   <small>CONTROLE DO MESTRE</small>
-
   <div class="master-controls">
    <button id="modifyBtn">MODIFICAR</button>
    <button id="saveBtn">SALVAR</button>
    <button id="historyBtn">VISUALIZAR HISTÓRICO</button>
    <button id="clearHistoryBtn" class="danger-button">APAGAR HISTÓRICO</button>
   </div>
-
   <p id="masterStatus" class="status">Modo de visualização.</p>
-
   <div class="row between">
    <small>RELAÇÕES DO PERSONAGEM</small>
    <button id="masterHateBtn">✳ REGISTRAR ÓDIO</button>
   </div>
-
   <div id="masterPeople" class="grid"></div>
-
   <div id="masterAudioInstructions" class="audio-instructions hidden">
    MODO ÓDIO ATIVADO // SELECIONE UM PERSONAGEM E MARQUE OS PONTOS VERMELHOS
   </div>
-
   <div id="masterAudioConfirm" class="audio-confirm hidden">
-   <div>
-    <strong>VOCÊ TEM CERTEZA?</strong>
-    <p id="masterAudioConfirmText"></p>
-   </div>
-
+   <div><strong>VOCÊ TEM CERTEZA?</strong><p id="masterAudioConfirmText"></p></div>
    <div class="row">
     <button id="masterConfirmHate" class="confirm">CONFIRMAR</button>
     <button id="masterCancelHate">VOLTAR AO NORMAL</button>
    </div>
   </div>
-
   <section id="historyPanel" class="history-panel hidden">
    <div class="row between">
     <small id="historyTitle">HISTÓRICO</small>
@@ -472,7 +187,6 @@ body.audio-mode .audio-instructions{color:#ff737d}
    <div id="history"></div>
   </section>
  </section>
-
 </section>
 </main>
 
@@ -497,8 +211,6 @@ const allCharacters=[
  "Lisandre",
  "Kalel"
 ];
-
-/* ARQUIVOS DOS RETRATOS */
 
 const portraitFiles={
  Sol:"sol.png",
@@ -531,12 +243,9 @@ ambienteAudio.loop=true;
 ambienteAudio.volume=0.25;
 
 let data;
-
 try{
  data=JSON.parse(localStorage.getItem("relacoes_data"))||{};
-}catch(e){
- data={};
-}
+}catch(e){data={};}
 
 if(!data.relations)data.relations={};
 if(!data.history)data.history=[];
@@ -548,19 +257,13 @@ function save(){
 }
 
 function getRelation(a,b){
- return data.relations[a+"|"+b]||{
-  trust:0,
-  hate:0
- };
+ return data.relations[a+"|"+b]||{trust:0,hate:0};
 }
 
 function record(a,b,type,value){
  data.history.unshift({
   date:new Date().toLocaleString("pt-BR"),
-  actor:a,
-  target:b,
-  type,
-  value
+  actor:a,target:b,type,value
  });
  save();
 }
@@ -575,27 +278,16 @@ function setSavedIdentity(name){
 
 function getCharacters(){
  return roster[playerIdentity]||[];
-}
-
-/* LOGIN E IDENTIDADE */
+}/* LOGIN E IDENTIDADE */
 
 $("player").onchange=()=>{
  const p=$("player").value;
  const saved=getSavedIdentity();
 
- $("charBox").classList.toggle(
-  "hidden",
-  !p||p==="Mestre"
- );
-
- $("passBox").classList.toggle(
-  "hidden",
-  p!=="Mestre"
- );
-
+ $("charBox").classList.toggle("hidden",!p||p==="Mestre");
+ $("passBox").classList.toggle("hidden",p!=="Mestre");
  $("identityPassBox").classList.toggle(
-  "hidden",
-  !p||p==="Mestre"||!saved||p===saved
+  "hidden",!p||p==="Mestre"||!saved||p===saved
  );
 
  $("character").innerHTML="";
@@ -607,8 +299,7 @@ $("player").onchange=()=>{
  $("loginStatus").textContent="";
 
  if(saved&&p&&p!=="Mestre"&&p!==saved){
-  $("loginStatus").textContent=
-   "Para trocar de jogador, informe a senha secreta.";
+  $("loginStatus").textContent="Para trocar de jogador, informe a senha secreta.";
  }
 };
 
@@ -656,7 +347,6 @@ $("loginBtn").onclick=()=>{
 
  $("login").classList.add("hidden");
  $("application").classList.remove("hidden");
-
  $("playerName").textContent=playerIdentity.toUpperCase();
 
  $("playerArea").classList.toggle("hidden",master);
@@ -665,11 +355,8 @@ $("loginBtn").onclick=()=>{
  renderTabs();
  updateActiveName();
 
- if(master){
-  renderMaster();
- }else{
-  renderPlayer();
- }
+ if(master)renderMaster();
+ else renderPlayer();
 };
 
 /* ABAS DE PERSONAGENS */
@@ -728,7 +415,6 @@ function resetIdentity(){
 
  setSavedIdentity(newPlayer);
  alert("Identidade alterada. Entre novamente com o novo jogador.");
-
  exitApplication();
 }
 
@@ -790,7 +476,6 @@ function renderRelations(container,editable){
 
  allCharacters.filter(name=>name!==current).forEach(name=>{
   const r=getRelation(current,name);
-
   const card=document.createElement("div");
   card.className="person";
 
@@ -804,20 +489,15 @@ function renderRelations(container,editable){
    <div class="portrait">
     ${
      portraitFile
-      ? `<img
-          src="${portraitFile}"
-          alt="${name}"
-          onerror="this.style.display='none';this.parentElement.textContent='RETRATO';"
-         >`
+      ? `<img src="${portraitFile}" alt="${name}"
+          onerror="this.style.display='none';this.parentElement.textContent='RETRATO';">`
       : "RETRATO"
     }
    </div>
    <div style="flex:1;min-width:0">
     <div class="name">${name.toUpperCase()}</div>
     <div class="dots trust"></div>
-    <div class="hate-label ${r.hate?"":"hidden"}">
-     ÓDIO
-    </div>
+    <div class="hate-label ${r.hate?"":"hidden"}">ÓDIO</div>
     <div class="dots hate"></div>
    </div>
   `;
@@ -826,9 +506,7 @@ function renderRelations(container,editable){
   const hateDots=card.querySelector(".hate");
 
   if(hateMode){
-   createDots(
-    trustDots,r.trust,3,"white",null,true
-   );
+   createDots(trustDots,r.trust,3,"white",null,true);
 
    createDots(
     hateDots,
@@ -840,8 +518,7 @@ function renderRelations(container,editable){
      const previousValue=selectedHateValue;
 
      selectedTarget=name;
-     selectedHateValue=
-      sameTarget&&n===previousValue?0:n;
+     selectedHateValue=sameTarget&&n===previousValue?0:n;
 
      const confirm=$("masterArea").classList.contains("hidden")
       ?$("audioConfirm")
@@ -876,10 +553,7 @@ function renderRelations(container,editable){
     !editable
    );
 
-   createDots(
-    hateDots,r.hate,3,"red",null,true
-   );
-
+   createDots(hateDots,r.hate,3,"red",null,true);
    hateDots.classList.toggle("hidden",!r.hate);
   }
 
@@ -1009,9 +683,7 @@ function renderMaster(){
 
 $("modifyBtn").onclick=()=>{
  if(hateMode)exitAudioMode();
-
  editingEnabled=!editingEnabled;
-
  renderMaster();
 };
 
@@ -1038,7 +710,7 @@ $("closeHistoryBtn").onclick=()=>{
  $("historyBtn").textContent="VISUALIZAR HISTÓRICO";
 };
 
-/* HISTÓRICO GERAL: MOSTRA ALTERAÇÕES DE TODOS */
+/* HISTÓRICO GERAL */
 
 function renderHistory(){
  const entries=data.history;
@@ -1049,7 +721,7 @@ function renderHistory(){
   `<div class="entry">
    ${h.date} · ${h.actor} → ${h.target} · ${h.type}: ${h.value}
   </div>`
- ) ).join("")||"Nenhuma alteração registrada.";
+ ).join("")||"Nenhuma alteração registrada.";
 }
 
 /* APAGAR HISTÓRICO */
@@ -1057,9 +729,7 @@ function renderHistory(){
 $("clearHistoryBtn").onclick=()=>{
  if(!confirm("Deseja apagar o histórico?"))return;
 
- data.history=data.history.filter(
-  h=>h.actor!==current
- );
+ data.history=data.history.filter(h=>h.actor!==current);
 
  save();
  renderHistory();
@@ -1101,6 +771,5 @@ $("player").addEventListener("dblclick",()=>{
  resetIdentity();
 });
 </script>
-
 </body>
 </html>
